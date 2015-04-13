@@ -495,17 +495,15 @@ class CaptureOutput(object):
 
 class FakeKeystone(object):
     '''
-    Fake keystone client module. Returns given endpoint url and auth token.
+    Fake keystone client module. Returns given endpoint url.
     '''
-    def __init__(self, endpoint, token):
+    def __init__(self, endpoint):
         self.calls = []
         self.auth_version = None
         self.endpoint = endpoint
-        self.token = token
 
     class _Client():
-        def __init__(self, endpoint, token, **kwargs):
-            self.auth_token = token
+        def __init__(self, endpoint, **kwargs):
             self.endpoint = endpoint
             self.service_catalog = self.ServiceCatalog(endpoint)
 
@@ -520,8 +518,7 @@ class FakeKeystone(object):
 
     def Client(self, **kwargs):
         self.calls.append(kwargs)
-        self.client = self._Client(endpoint=self.endpoint, token=self.token,
-                                   **kwargs)
+        self.client = self._Client(endpoint=self.endpoint, **kwargs)
         return self.client
 
     class Unauthorized(Exception):

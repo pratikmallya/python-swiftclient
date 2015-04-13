@@ -1339,7 +1339,7 @@ class TestKeystoneOptions(MockHttpTest):
                               cmd_args=cmd_args)
         ks_endpoint = 'http://example.com:8080/v1/AUTH_acc'
         ks_token = 'fake_auth_token'
-        fake_ks = FakeKeystone(endpoint=ks_endpoint, token=ks_token)
+        fake_ks = FakeKeystone(endpoint=ks_endpoint)
         # fake_conn will check that storage_url and auth_token are as expected
         endpoint = os_opts.get('storage-url', ks_endpoint)
         token = os_opts.get('auth-token', ks_token)

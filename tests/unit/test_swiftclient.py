@@ -275,11 +275,12 @@ class TestGetAuth(MockHttpTest):
         # this test has some overlap with
         # TestConnection.test_timeout_passed_down but is required to check that
         # get_auth does the right thing when it is not passed a timeout arg
-        fake_ks = FakeKeystone(endpoint='http://some_url', token='secret')
+        fake_ks = FakeKeystone(endpoint='http://some_url')
         with mock.patch('swiftclient.client._import_keystone_client',
                         _make_fake_import_keystone_client(fake_ks)):
             c.get_auth('http://www.test.com', 'asdf', 'asdf',
-                       os_options=dict(tenant_name='tenant'),
+                       os_options=dict(tenant_name='tenant',
+                                       auth_token='secret'),
                        auth_version="2.0", timeout=42.0)
             c.get_auth('http://www.test.com', 'asdf', 'asdf',
                        os_options=dict(tenant_name='tenant'),
@@ -1525,8 +1526,9 @@ class TestConnection(MockHttpTest):
         timeouts = []
         conn = c.Connection(
             'http://auth.example.com', 'user', 'password', timeout=33.0,
-            os_options=dict(tenant_name='tenant'), auth_version=2.0)
-        fake_ks = FakeKeystone(endpoint='http://some_url', token='secret')
+            os_options=dict(tenant_name='tenant', auth_token='secret'),
+            auth_version=2.0)
+        fake_ks = FakeKeystone(endpoint='http://some_url')
         with mock.patch('swiftclient.client._import_keystone_client',
                         _make_fake_import_keystone_client(fake_ks)):
             with mock.patch.multiple('swiftclient.client',
