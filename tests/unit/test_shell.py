@@ -1338,11 +1338,10 @@ class TestKeystoneOptions(MockHttpTest):
             args = _make_args(cmd, opts, os_opts, separator='-', flags=flags,
                               cmd_args=cmd_args)
         ks_endpoint = 'http://example.com:8080/v1/AUTH_acc'
-        ks_token = 'fake_auth_token'
-        fake_ks = FakeKeystone(endpoint=ks_endpoint, token=ks_token)
+        fake_ks = FakeKeystone(endpoint=ks_endpoint)
         # fake_conn will check that storage_url and auth_token are as expected
         endpoint = os_opts.get('storage-url', ks_endpoint)
-        token = os_opts.get('auth-token', ks_token)
+        token = os_opts.get('auth-token')
         fake_conn = self.fake_http_connection(204, headers={},
                                               storage_url=endpoint,
                                               auth_token=token)
@@ -1709,8 +1708,7 @@ class TestCrossAccountObjectAccess(TestBase, MockHttpTest):
         self.account = 'AUTH_alice'
 
         # keystone returns endpoint for another account
-        fake_ks = FakeKeystone(endpoint='http://example.com:8080/v1/AUTH_bob',
-                               token='bob_token')
+        fake_ks = FakeKeystone(endpoint='http://example.com:8080/v1/AUTH_bob')
         self.fake_ks_import = _make_fake_import_keystone_client(fake_ks)
 
         self.cont = 'c1'
